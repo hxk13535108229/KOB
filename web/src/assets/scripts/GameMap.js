@@ -1,4 +1,5 @@
 import { KobGameObject } from "./KobGameObject";
+import { Snake } from "./Snake";
 import { Wall } from "./Wall";
 
 export class GameMap extends KobGameObject {
@@ -10,13 +11,19 @@ export class GameMap extends KobGameObject {
         // 绝对距离
         this.L = 0;
         this.rows = 13;
-        this.cols = 13;
+        this.cols = 14;
 
         // 障碍物
         this.walls = [];
 
         // 内部障碍物数量
         this.inner_walls_count = 30;
+
+        // 创建两条蛇
+        this.snakes = [
+            new Snake({id:0,color:"#4876EC",r:this.rows-2,c:1},this),
+            new Snake({id:1,color:"#F94848",r:1,c:this.cols-2},this),
+        ]
     }
 
     // 判断是否连通 起点和终点的横纵坐标
@@ -52,16 +59,16 @@ export class GameMap extends KobGameObject {
             g[0][c]=g[this.rows-1][c]=true;
         }
 
-        // 随机一半  轴对称生成
+        // 随机一半  中心对称生成
         for (let i =0;i<this.inner_walls_count/2;i++) {
             for (let j = 0;j<1000;j++) {
                 let r= parseInt(Math.random()*this.rows);
                 let c =parseInt(Math.random()*this.cols);
-                if (g[r][c] || g[c][r]) continue;
+                if (g[r][c] || g[this.rows-1-r][this.cols-1-c]) continue;
                 // 左下角和右上角不能放
                 if (r == this.rows-2 && c == 1 || r==1 && c==this.cols-2) continue;
 
-                g[r][c] = g[c][r] =true;
+                g[r][c] = g[this.rows-1-r][this.cols-1-c] =true;
                 break;
             }
         }
@@ -88,6 +95,16 @@ export class GameMap extends KobGameObject {
         for (let i = 0;i<10000;i++) {
         if (this.create_walls()) break;
         }
+    }
+
+    // 判断蛇准备好没有
+    check_ready() {
+        for (const snake of this.snakes) {
+            if (snake.status!=="idle") return false;
+            if(snake.direction===-1) return false;
+        }
+
+        return true;
     }
 
     update_size() {
