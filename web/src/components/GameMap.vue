@@ -1,14 +1,12 @@
 <!--
  * @Date: 2022-10-26 14:31:11
  * @LastEditors: hxk
- * @LastEditTime: 2022-10-26 15:01:47
+ * @LastEditTime: 2022-11-13 17:47:47
  * @FilePath: \web\src\components\GameMap.vue
 -->
 <template>
 <div ref="parent" class="gamemap">
-    <canvas ref="canvas">
-
-    </canvas>
+    <canvas ref="canvas" tabindex="0"></canvas>
 </div>
 </template>
 
