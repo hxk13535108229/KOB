@@ -24,6 +24,8 @@ export class GameMap extends KobGameObject {
             new Snake({ id: 0, color: "#4876EC", r: this.rows - 2, c: 1 }, this),
             new Snake({ id: 1, color: "#F94848", r: 1, c: this.cols - 2 }, this),
         ]
+
+        
     }
 
     // 判断是否连通 起点和终点的横纵坐标
@@ -159,6 +161,29 @@ export class GameMap extends KobGameObject {
         for (const snake of this.snakes) {
             snake.next_step();
         }
+    }
+
+    check_vaild(cell) {
+        // 检测是否合法
+        for (const wall of this.walls) {
+            if (wall.r === cell.r && wall.c === cell.c) {
+                return false;
+            }
+        }
+
+        for (const snake of this.snakes) {
+            let k = snake.cells.length;
+            if (!snake.check_tail_increasing()) {
+                k --;
+            }
+            for (let i=0;i<k;i++) {
+                if (snake.cells[i].r === cell.r && snake.cells[i].c === cell.c) {
+                    return false;
+                }
+            }
+        }
+
+        return true; 
     }
 
     update() {
