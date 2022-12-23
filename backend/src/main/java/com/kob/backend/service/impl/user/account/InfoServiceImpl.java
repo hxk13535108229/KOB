@@ -26,7 +26,7 @@ public class InfoServiceImpl implements InfoService {
         UserDetailsImpl loginUser=(UserDetailsImpl) authenticationToken.getPrincipal();
         User user=loginUser.getUser();
         Map<String,String> map=new HashMap<>();
-        map.put("error_massage", "success");
+        map.put("error_message", "success");
         map.put("id", user.getId().toString());
         map.put("username", user.getUsername());
         map.put("password",user.getPassword());
